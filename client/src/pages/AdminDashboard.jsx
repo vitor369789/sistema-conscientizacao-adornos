@@ -6,10 +6,12 @@ import {
   Users, TrendingUp, Award, Calendar, 
   LogOut, Printer, Trash2, Search, 
   BarChart3, CheckCircle, XCircle, Filter, QrCode, Download, X, Settings,
-  Presentation, HelpCircle, Plus, Edit, Save
+  Presentation, HelpCircle, Plus, Edit, Save, Image
 } from 'lucide-react';
 import SlidesManager from '../components/SlidesManager';
 import QuestionsManager from '../components/QuestionsManager';
+import SiteConfigManager from '../components/SiteConfigManager';
+import LogoManager from '../components/LogoManager';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ function AdminDashboard() {
   const [showPosterSettings, setShowPosterSettings] = useState(false);
   const [showSlidesManager, setShowSlidesManager] = useState(false);
   const [showQuestionsManager, setShowQuestionsManager] = useState(false);
+  const [showSiteConfig, setShowSiteConfig] = useState(false);
+  const [showLogoManager, setShowLogoManager] = useState(false);
   const [posterConfig, setPosterConfig] = useState(() => {
     const saved = localStorage.getItem('posterConfig');
     return saved ? JSON.parse(saved) : {
@@ -247,6 +251,24 @@ function AdminDashboard() {
               >
                 <Settings className="w-5 h-5" />
                 Config Poster
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowSiteConfig(true)}
+                className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors"
+              >
+                <Settings className="w-5 h-5" />
+                Config Site
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowLogoManager(true)}
+                className="flex items-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors"
+              >
+                <Image className="w-5 h-5" />
+                Gerenciar Logos
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -1034,6 +1056,16 @@ function AdminDashboard() {
       {/* Questions Manager Modal */}
       {showQuestionsManager && (
         <QuestionsManager onClose={() => setShowQuestionsManager(false)} />
+      )}
+
+      {/* Site Config Manager Modal */}
+      {showSiteConfig && (
+        <SiteConfigManager onClose={() => setShowSiteConfig(false)} />
+      )}
+
+      {/* Logo Manager Modal */}
+      {showLogoManager && (
+        <LogoManager onClose={() => setShowLogoManager(false)} />
       )}
     </div>
   );

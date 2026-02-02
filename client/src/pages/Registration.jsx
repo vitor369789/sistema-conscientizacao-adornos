@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { UserCircle, Briefcase, GraduationCap, Phone, ArrowRight, Sparkles } from 'lucide-react';
+
+const API_URL = import.meta.env.VITE_API_URL?.includes('d36.com.br') 
+  ? import.meta.env.VITE_API_URL + '/api'
+  : 'http://localhost:4001/api';
 
 function Registration() {
   const navigate = useNavigate();
@@ -11,11 +15,29 @@ function Registration() {
     formation: '',
     phone: ''
   });
+  const [siteConfig, setSiteConfig] = useState({
+    site_title: 'Conscientização sobre Adornos',
+    welcome_message: 'Bem-vindo! Vamos começar uma jornada interativa de aprendizado'
+  });
   const [logo1Error, setLogo1Error] = useState(false);
   const [logo2Error, setLogo2Error] = useState(false);
   const [logo3Error, setLogo3Error] = useState(false);
   const [logo4Error, setLogo4Error] = useState(false);
   const [logo5Error, setLogo5Error] = useState(false);
+
+  useEffect(() => {
+    fetchSiteConfig();
+  }, []);
+
+  const fetchSiteConfig = async () => {
+    try {
+      const response = await fetch(`${API_URL}/config`);
+      const data = await response.json();
+      setSiteConfig(data);
+    } catch (error) {
+      console.error('Error fetching site config:', error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,7 +108,7 @@ function Registration() {
           transition={{ delay: 0.3 }}
           className="text-4xl md:text-5xl font-bold text-center mb-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
         >
-          Conscientização sobre Adornos
+          {siteConfig.site_title}
         </motion.h1>
 
         <motion.p
@@ -95,7 +117,7 @@ function Registration() {
           transition={{ delay: 0.4 }}
           className="text-center text-gray-600 mb-8 text-lg"
         >
-          Bem-vindo! Vamos começar uma jornada interativa de aprendizado
+          {siteConfig.welcome_message}
         </motion.p>
 
         <form onSubmit={handleSubmit} className="space-y-6">

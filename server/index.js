@@ -4,6 +4,8 @@ import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import dotenv from 'dotenv';
+import multer from 'multer';
+import { existsSync, unlinkSync } from 'fs';
 
 // Carrega variáveis de ambiente do arquivo .env na raiz do projeto
 dotenv.config({ path: join(dirname(fileURLToPath(import.meta.url)), '..', '.env') });
@@ -16,6 +18,33 @@ const PORT = process.env.API_PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from client/public directory
+const clientPublicPath = join(__dirname, '..', 'client', 'public');
+app.use('/uploads', express.static(clientPublicPath));
+
+// Configure multer for logo uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, clientPublicPath);
+  },
+  filename: (req, file, cb) => {
+    const logoNumber = req.params.number;
+    cb(null, `logo${logoNumber}.png`);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
 
 const db = new Database(join(__dirname, 'database.db'));
 
@@ -68,6 +97,28 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS site_config (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    config_key TEXT UNIQUE NOT NULL,
+    config_value TEXT NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
+// Insert default config values if not exists
+const defaultConfigs = [
+  { key: 'site_title', value: 'Conscientização sobre Adornos' },
+  { key: 'welcome_message', value: 'Bem-vindo! Vamos começar uma jornada interativa de aprendizado' }
+];
+
+defaultConfigs.forEach(config => {
+  db.prepare(`
+    INSERT OR IGNORE INTO site_config (config_key, config_value)
+    VALUES (?, ?)
+  `).run(config.key, config.value);
+});
 
 app.post('/api/submit', (req, res) => {
   try {
@@ -292,6 +343,114 @@ app.delete('/api/quiz-questions/:id', (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error('Error deleting question:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Site Config API endpoints
+app.get('/api/config', (req, res) => {
+  try {
+    const configs = db.prepare('SELECT * FROM site_config').all();
+    const configObj = {};
+    configs.forEach(c => {
+      configObj[c.config_key] = c.config_value;
+    });
+    res.json(configObj);
+  } catch (error) {
+    console.error('Error fetching config:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/config', (req, res) => {
+  try {
+    const { site_title, welcome_message } = req.body;
+    
+    if (site_title) {
+      db.prepare(`
+        INSERT OR REPLACE INTO site_config (id, config_key, config_value, updated_at)
+        VALUES (
+          (SELECT id FROM site_config WHERE config_key = 'site_title'),
+          'site_title',
+          ?,
+          CURRENT_TIMESTAMP
+        )
+      `).run(site_title);
+    }
+    
+    if (welcome_message) {
+      db.prepare(`
+        INSERT OR REPLACE INTO site_config (id, config_key, config_value, updated_at)
+        VALUES (
+          (SELECT id FROM site_config WHERE config_key = 'welcome_message'),
+          'welcome_message',
+          ?,
+          CURRENT_TIMESTAMP
+        )
+      `).run(welcome_message);
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating config:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Logo Management API endpoints (only for logos 1, 2, and 3)
+app.post('/api/logo/:number', upload.single('logo'), (req, res) => {
+  try {
+    const { number } = req.params;
+    
+    // Only allow logos 1, 2, and 3
+    if (!['1', '2', '3'].includes(number)) {
+      return res.status(400).json({ success: false, error: 'Only logos 1, 2, and 3 can be managed' });
+    }
+    
+    res.json({ 
+      success: true, 
+      message: `Logo ${number} uploaded successfully`,
+      filename: `logo${number}.png`
+    });
+  } catch (error) {
+    console.error('Error uploading logo:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/logo/:number', (req, res) => {
+  try {
+    const { number } = req.params;
+    
+    // Only allow logos 1, 2, and 3
+    if (!['1', '2', '3'].includes(number)) {
+      return res.status(400).json({ success: false, error: 'Only logos 1, 2, and 3 can be managed' });
+    }
+    
+    const logoPath = join(clientPublicPath, `logo${number}.png`);
+    
+    if (existsSync(logoPath)) {
+      unlinkSync(logoPath);
+      res.json({ success: true, message: `Logo ${number} deleted successfully` });
+    } else {
+      res.status(404).json({ success: false, error: 'Logo not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting logo:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/api/logos/status', (req, res) => {
+  try {
+    const status = {
+      logo1: existsSync(join(clientPublicPath, 'logo1.png')),
+      logo2: existsSync(join(clientPublicPath, 'logo2.png')),
+      logo3: existsSync(join(clientPublicPath, 'logo3.png'))
+    };
+    res.json(status);
+  } catch (error) {
+    console.error('Error checking logos status:', error);
     res.status(500).json({ error: error.message });
   }
 });
