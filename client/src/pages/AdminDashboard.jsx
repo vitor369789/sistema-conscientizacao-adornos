@@ -5,8 +5,11 @@ import { QRCodeSVG } from 'qrcode.react';
 import { 
   Users, TrendingUp, Award, Calendar, 
   LogOut, Printer, Trash2, Search, 
-  BarChart3, CheckCircle, XCircle, Filter, QrCode, Download, X
+  BarChart3, CheckCircle, XCircle, Filter, QrCode, Download, X, Settings,
+  Presentation, HelpCircle, Plus, Edit, Save
 } from 'lucide-react';
+import SlidesManager from '../components/SlidesManager';
+import QuestionsManager from '../components/QuestionsManager';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -18,6 +21,20 @@ function AdminDashboard() {
   const [viewMode, setViewMode] = useState('all');
   const [loading, setLoading] = useState(true);
   const [showQRCode, setShowQRCode] = useState(false);
+  const [showPoster, setShowPoster] = useState(false);
+  const [showPosterSettings, setShowPosterSettings] = useState(false);
+  const [showSlidesManager, setShowSlidesManager] = useState(false);
+  const [showQuestionsManager, setShowQuestionsManager] = useState(false);
+  const [posterConfig, setPosterConfig] = useState(() => {
+    const saved = localStorage.getItem('posterConfig');
+    return saved ? JSON.parse(saved) : {
+      title1: 'ACESSE O SISTEMA DE',
+      title2: 'CONSCIENTIZAÇÃO SOBRE ADORNOS',
+      subtitle: 'ATRAVÉS DO QR CODE',
+      footer: '🚫 ADORNO ZERO - Política Institucional',
+      legal: 'Base legal: NR-32 - Segurança e Saúde no Trabalho em Serviços de Saúde'
+    };
+  });
 
   useEffect(() => {
     const isAuth = localStorage.getItem('adminAuth');
@@ -104,6 +121,19 @@ function AdminDashboard() {
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   };
 
+  const handlePrintPoster = () => {
+    setShowPoster(true);
+    setTimeout(() => {
+      window.print();
+    }, 100);
+  };
+
+  const handleSavePosterConfig = () => {
+    localStorage.setItem('posterConfig', JSON.stringify(posterConfig));
+    setShowPosterSettings(false);
+    alert('Configurações do poster salvas com sucesso!');
+  };
+
   const filteredParticipants = participants.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          p.sector.toLowerCase().includes(searchTerm.toLowerCase());
@@ -137,7 +167,7 @@ function AdminDashboard() {
 
   return (
     <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className={`max-w-7xl mx-auto ${showPoster ? 'print:hidden' : ''}`}>
         <div className="hidden print:block mb-8 border-b-2 border-gray-300 pb-4">
           <h1 className="text-3xl font-bold text-gray-900 text-center mb-2">
             Sistema de Conscientização sobre Uso de Adornos
@@ -190,7 +220,7 @@ function AdminDashboard() {
               <p className="text-gray-600 mt-2">Gerencie os participantes e visualize estatísticas</p>
             </motion.div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -199,6 +229,42 @@ function AdminDashboard() {
               >
                 <QrCode className="w-5 h-5" />
                 QR Code
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handlePrintPoster}
+                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <Download className="w-5 h-5" />
+                Poster QR
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowPosterSettings(true)}
+                className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <Settings className="w-5 h-5" />
+                Config Poster
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowSlidesManager(true)}
+                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Presentation className="w-5 h-5" />
+                Gerenciar Slides
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowQuestionsManager(true)}
+                className="flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+              >
+                <HelpCircle className="w-5 h-5" />
+                Gerenciar Perguntas
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -718,6 +784,256 @@ function AdminDashboard() {
             </div>
           </motion.div>
         </div>
+      )}
+
+      {/* Poster Modal */}
+      {showPoster && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 print:bg-white print:relative print:inset-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 relative print:max-w-full print:rounded-none print:shadow-none print:mx-0"
+          >
+            <button
+              onClick={() => setShowPoster(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 print:hidden"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Poster Content */}
+            <div className="text-center py-12 print:py-16">
+              {/* Decorative element top */}
+              <div className="flex justify-center mb-8">
+                <svg width="80" height="80" viewBox="0 0 80 80" className="text-purple-300">
+                  <path d="M20 40 Q 30 20, 40 40 T 60 40" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <circle cx="25" cy="35" r="3" fill="currentColor"/>
+                  <circle cx="35" cy="25" r="3" fill="currentColor"/>
+                  <circle cx="45" cy="25" r="3" fill="currentColor"/>
+                  <circle cx="55" cy="35" r="3" fill="currentColor"/>
+                </svg>
+              </div>
+
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 print:text-5xl">
+                {posterConfig.title1}
+              </h1>
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-8 print:text-6xl">
+                {posterConfig.title2}
+              </h2>
+              <p className="text-xl text-gray-600 mb-12 print:text-2xl">
+                {posterConfig.subtitle}
+              </p>
+
+              {/* QR Code with decorative frame */}
+              <div className="flex justify-center mb-12">
+                <div className="relative">
+                  {/* Decorative corners */}
+                  <div className="absolute -top-4 -left-4 w-16 h-16 border-l-4 border-t-4 border-pink-400 rounded-tl-lg"></div>
+                  <div className="absolute -top-4 -right-4 w-16 h-16 border-r-4 border-t-4 border-pink-400 rounded-tr-lg"></div>
+                  <div className="absolute -bottom-4 -left-4 w-16 h-16 border-l-4 border-b-4 border-pink-400 rounded-bl-lg"></div>
+                  <div className="absolute -bottom-4 -right-4 w-16 h-16 border-r-4 border-b-4 border-pink-400 rounded-br-lg"></div>
+                  
+                  {/* QR Code */}
+                  <div className="bg-white p-6 rounded-xl shadow-lg">
+                    <QRCodeSVG
+                      value={window.location.origin}
+                      size={280}
+                      level="H"
+                      includeMargin={true}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Decorative element bottom */}
+              <div className="flex justify-center mb-8">
+                <svg width="80" height="80" viewBox="0 0 80 80" className="text-purple-300">
+                  <path d="M20 40 Q 30 60, 40 40 T 60 40" stroke="currentColor" strokeWidth="2" fill="none"/>
+                  <circle cx="25" cy="45" r="3" fill="currentColor"/>
+                  <circle cx="35" cy="55" r="3" fill="currentColor"/>
+                  <circle cx="45" cy="55" r="3" fill="currentColor"/>
+                  <circle cx="55" cy="45" r="3" fill="currentColor"/>
+                </svg>
+              </div>
+
+              <div className="border-t-2 border-gray-200 pt-6 mt-6">
+                <p className="text-lg text-gray-700 font-semibold mb-2 print:text-xl">
+                  {posterConfig.footer}
+                </p>
+                <p className="text-sm text-gray-600 print:text-base">
+                  {posterConfig.legal}
+                </p>
+                <p className="text-xs text-gray-500 mt-4 print:text-sm">
+                  {window.location.origin}
+                </p>
+              </div>
+            </div>
+
+            {/* Action buttons - hidden on print */}
+            <div className="flex gap-3 print:hidden mt-6">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.print()}
+                className="flex-1 flex items-center justify-center gap-2 bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <Printer className="w-5 h-5" />
+                Imprimir Poster
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowPoster(false)}
+                className="flex items-center justify-center gap-2 bg-gray-200 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+              >
+                <X className="w-5 h-5" />
+                Fechar
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Poster Settings Modal */}
+      {showPosterSettings && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 relative max-h-[90vh] overflow-y-auto"
+          >
+            <button
+              onClick={() => setShowPosterSettings(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+              ⚙️ Configurar Textos do Poster
+            </h2>
+
+            <div className="space-y-6">
+              {/* Title 1 */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Título Principal (Linha 1)
+                </label>
+                <input
+                  type="text"
+                  value={posterConfig.title1}
+                  onChange={(e) => setPosterConfig({...posterConfig, title1: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                  placeholder="Ex: ACESSE O SISTEMA DE"
+                />
+              </div>
+
+              {/* Title 2 */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Título Principal (Linha 2) - Destaque
+                </label>
+                <input
+                  type="text"
+                  value={posterConfig.title2}
+                  onChange={(e) => setPosterConfig({...posterConfig, title2: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                  placeholder="Ex: CONSCIENTIZAÇÃO SOBRE ADORNOS"
+                />
+              </div>
+
+              {/* Subtitle */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Subtítulo / Instrução
+                </label>
+                <input
+                  type="text"
+                  value={posterConfig.subtitle}
+                  onChange={(e) => setPosterConfig({...posterConfig, subtitle: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                  placeholder="Ex: ATRAVÉS DO QR CODE"
+                />
+              </div>
+
+              {/* Footer */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Rodapé - Política
+                </label>
+                <input
+                  type="text"
+                  value={posterConfig.footer}
+                  onChange={(e) => setPosterConfig({...posterConfig, footer: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                  placeholder="Ex: 🚫 ADORNO ZERO - Política Institucional"
+                />
+              </div>
+
+              {/* Legal */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Base Legal
+                </label>
+                <input
+                  type="text"
+                  value={posterConfig.legal}
+                  onChange={(e) => setPosterConfig({...posterConfig, legal: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                  placeholder="Ex: Base legal: NR-32 - Segurança e Saúde no Trabalho"
+                />
+              </div>
+
+              {/* Preview */}
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border-2 border-purple-200">
+                <h3 className="text-lg font-bold text-purple-900 mb-4">📋 Prévia do Poster</h3>
+                <div className="bg-white p-6 rounded-lg text-center">
+                  <p className="text-lg font-bold text-gray-800 mb-2">{posterConfig.title1}</p>
+                  <p className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                    {posterConfig.title2}
+                  </p>
+                  <p className="text-sm text-gray-600 mb-4">{posterConfig.subtitle}</p>
+                  <div className="border-t pt-4 mt-4">
+                    <p className="text-sm font-semibold text-gray-700">{posterConfig.footer}</p>
+                    <p className="text-xs text-gray-600 mt-2">{posterConfig.legal}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-3 mt-8">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleSavePosterConfig}
+                className="flex-1 flex items-center justify-center gap-2 bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <CheckCircle className="w-5 h-5" />
+                Salvar Configurações
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowPosterSettings(false)}
+                className="flex items-center justify-center gap-2 bg-gray-200 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-300 transition-colors"
+              >
+                <X className="w-5 h-5" />
+                Cancelar
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Slides Manager Modal */}
+      {showSlidesManager && (
+        <SlidesManager onClose={() => setShowSlidesManager(false)} />
+      )}
+
+      {/* Questions Manager Modal */}
+      {showQuestionsManager && (
+        <QuestionsManager onClose={() => setShowQuestionsManager(false)} />
       )}
     </div>
   );

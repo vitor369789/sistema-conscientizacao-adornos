@@ -44,6 +44,31 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS slides (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    icon TEXT NOT NULL,
+    color TEXT NOT NULL,
+    illustration TEXT NOT NULL,
+    content TEXT NOT NULL,
+    slide_order INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS quiz_questions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    question TEXT NOT NULL,
+    options TEXT NOT NULL,
+    correct INTEGER NOT NULL,
+    explanation TEXT NOT NULL,
+    question_order INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
 app.post('/api/submit', (req, res) => {
   try {
     const { name, sector, formation, phone, score, totalQuestions, answers } = req.body;
@@ -151,6 +176,122 @@ app.delete('/api/viewers/:id', (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error('Error deleting viewer:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Slides API endpoints
+app.get('/api/slides', (req, res) => {
+  try {
+    const slides = db.prepare('SELECT * FROM slides ORDER BY slide_order ASC').all();
+    const formattedSlides = slides.map(s => ({
+      ...s,
+      content: JSON.parse(s.content)
+    }));
+    res.json(formattedSlides);
+  } catch (error) {
+    console.error('Error fetching slides:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/slides', (req, res) => {
+  try {
+    const { title, icon, color, illustration, content, slide_order } = req.body;
+    const stmt = db.prepare(`
+      INSERT INTO slides (title, icon, color, illustration, content, slide_order)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `);
+    const result = stmt.run(title, icon, color, illustration, JSON.stringify(content), slide_order);
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (error) {
+    console.error('Error creating slide:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.put('/api/slides/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, icon, color, illustration, content, slide_order } = req.body;
+    const stmt = db.prepare(`
+      UPDATE slides 
+      SET title = ?, icon = ?, color = ?, illustration = ?, content = ?, slide_order = ?
+      WHERE id = ?
+    `);
+    stmt.run(title, icon, color, illustration, JSON.stringify(content), slide_order, id);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating slide:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/slides/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    db.prepare('DELETE FROM slides WHERE id = ?').run(id);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting slide:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Quiz Questions API endpoints
+app.get('/api/quiz-questions', (req, res) => {
+  try {
+    const questions = db.prepare('SELECT * FROM quiz_questions ORDER BY question_order ASC').all();
+    const formattedQuestions = questions.map(q => ({
+      ...q,
+      options: JSON.parse(q.options)
+    }));
+    res.json(formattedQuestions);
+  } catch (error) {
+    console.error('Error fetching questions:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/quiz-questions', (req, res) => {
+  try {
+    const { question, options, correct, explanation, question_order } = req.body;
+    const stmt = db.prepare(`
+      INSERT INTO quiz_questions (question, options, correct, explanation, question_order)
+      VALUES (?, ?, ?, ?, ?)
+    `);
+    const result = stmt.run(question, JSON.stringify(options), correct, explanation, question_order);
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (error) {
+    console.error('Error creating question:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.put('/api/quiz-questions/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { question, options, correct, explanation, question_order } = req.body;
+    const stmt = db.prepare(`
+      UPDATE quiz_questions 
+      SET question = ?, options = ?, correct = ?, explanation = ?, question_order = ?
+      WHERE id = ?
+    `);
+    stmt.run(question, JSON.stringify(options), correct, explanation, question_order, id);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating question:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/quiz-questions/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    db.prepare('DELETE FROM quiz_questions WHERE id = ?').run(id);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting question:', error);
     res.status(500).json({ error: error.message });
   }
 });

@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, Trophy, Clock } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL?.includes('d36.com.br') 
+  ? import.meta.env.VITE_API_URL + '/api'
+  : 'http://localhost:4001/api';
+
 // Função para embaralhar array
 const shuffleArray = (array) => {
   const newArray = [...array];
@@ -13,7 +17,8 @@ const shuffleArray = (array) => {
   return newArray;
 };
 
-const questionsOriginal = [
+// Fallback questions in case API fails or is empty
+const defaultQuestions = [
   {
     id: 1,
     question: 'Anel, aliança ou alargador: pode durante a assistência?',
@@ -145,21 +150,49 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [questions, setQuestions] = useState([]);
 
-  // Embaralhar respostas ao carregar o componente
+  // Fetch questions from API and shuffle options
   useEffect(() => {
-    const shuffledQuestions = questionsOriginal.map(q => {
-      const correctAnswer = q.options[q.correct];
-      const shuffledOptions = shuffleArray(q.options);
-      const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
-      
-      return {
-        ...q,
-        options: shuffledOptions,
-        correct: newCorrectIndex
-      };
-    });
-    setQuestions(shuffledQuestions);
+    fetchQuestions();
   }, []);
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(`${API_URL}/quiz-questions`);
+      const data = await response.json();
+      
+      const questionsToUse = (data && data.length > 0) ? data : defaultQuestions;
+      
+      // Shuffle options for each question
+      const shuffledQuestions = questionsToUse.map(q => {
+        const correctAnswer = q.options[q.correct];
+        const shuffledOptions = shuffleArray(q.options);
+        const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
+        
+        return {
+          ...q,
+          options: shuffledOptions,
+          correct: newCorrectIndex
+        };
+      });
+      
+      setQuestions(shuffledQuestions);
+    } catch (error) {
+      console.error('Error fetching questions, using defaults:', error);
+      // Use default questions if API fails
+      const shuffledQuestions = defaultQuestions.map(q => {
+        const correctAnswer = q.options[q.correct];
+        const shuffledOptions = shuffleArray(q.options);
+        const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
+        
+        return {
+          ...q,
+          options: shuffledOptions,
+          correct: newCorrectIndex
+        };
+      });
+      setQuestions(shuffledQuestions);
+    }
+  };
 
   if (questions.length === 0) {
     return <div className="min-h-screen flex items-center justify-center">

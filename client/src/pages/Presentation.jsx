@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, AlertTriangle, Shield, XCircle, CheckCircle, Sparkles } from 'lucide-react';
 import { RingIllustration, WatchIllustration, NecklaceIllustration, SafetyIllustration, MachineIllustration, WorkerIllustration } from '../components/AdornmentIllustration';
 
-const slides = [
+const API_URL = import.meta.env.VITE_API_URL?.includes('d36.com.br') 
+  ? import.meta.env.VITE_API_URL + '/api'
+  : 'http://localhost:4001/api';
+
+// Fallback slides in case API fails or is empty
+const defaultSlides = [
   {
     id: 1,
     title: 'Segurança em Primeiro Lugar',
@@ -12,10 +17,11 @@ const slides = [
     color: 'from-blue-500 to-cyan-500',
     illustration: SafetyIllustration,
     content: [
-      'Adornos podem parecer inofensivos, mas em ambientes de trabalho podem representar sérios riscos',
-      'Vamos entender juntos por que a segurança deve sempre vir em primeiro lugar',
-      'Esta apresentação vai mostrar situações reais e como prevenir acidentes',
-      '📖 Base legal: NR-32 - Segurança e Saúde no Trabalho em Serviços de Saúde'
+      '🏥 Adornos não são permitidos durante a assistência',
+      '🦠 O cuidado começa antes do contato com o paciente',
+      '⚠️ Pequenos detalhes podem interferir na segurança de todos',
+      '📖 Base legal: NR-32 - Segurança e Saúde no Trabalho em Serviços de Saúde',
+      '🎀 Qualquer adorno que dificulte a higienização'
     ]
   },
   {
@@ -141,9 +147,55 @@ const slides = [
   }
 ];
 
+// Map icon names to actual icon components
+const iconMap = {
+  Shield,
+  Sparkles,
+  AlertTriangle,
+  XCircle,
+  CheckCircle
+};
+
+// Map illustration names to actual illustration components
+const illustrationMap = {
+  SafetyIllustration,
+  RingIllustration,
+  WatchIllustration,
+  NecklaceIllustration,
+  MachineIllustration,
+  WorkerIllustration
+};
+
 function Presentation() {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [slides, setSlides] = useState(defaultSlides);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSlides();
+  }, []);
+
+  const fetchSlides = async () => {
+    try {
+      const response = await fetch(`${API_URL}/slides`);
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        // Map API data to component format
+        const formattedSlides = data.map(slide => ({
+          ...slide,
+          icon: iconMap[slide.icon] || Shield,
+          illustration: illustrationMap[slide.illustration] || SafetyIllustration
+        }));
+        setSlides(formattedSlides);
+      }
+    } catch (error) {
+      console.error('Error fetching slides, using defaults:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const nextSlide = () => {
     // Scroll para o topo antes de mudar de slide
@@ -198,6 +250,14 @@ function Presentation() {
       setCurrentSlide(currentSlide - 1);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="text-2xl font-bold text-purple-600">Carregando apresentação...</div>
+      </div>
+    );
+  }
 
   const slide = slides[currentSlide];
   const Icon = slide.icon;

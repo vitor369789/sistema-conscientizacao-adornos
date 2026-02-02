@@ -70,7 +70,7 @@
 
 @media print {
   @page {
-    size: landscape;
+    size: auto;
     margin: 1cm;
   }
   
@@ -121,14 +121,11 @@
     page-break-after: avoid;
   }
   
+  /* Keep gradient colors for poster */
   .bg-gradient-to-r,
   .bg-gradient-to-br {
-    background: white !important;
-    color: #1f2937 !important;
-  }
-  
-  .text-white {
-    color: #1f2937 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
   
   table th,
