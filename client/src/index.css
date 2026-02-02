@@ -5,6 +5,7 @@
 @layer base {
   html {
     overflow-x: hidden;
+    font-size: 14px; /* Reduz base de 16px para 14px (~12.5% redução) */
   }
   
   body {
@@ -16,6 +17,13 @@
   #root {
     overflow-x: hidden;
   }
+  
+  /* Redução adicional para mobile */
+  @media (max-width: 768px) {
+    html {
+      font-size: 12px; /* Reduz ainda mais no mobile (~25% redução) */
+    }
+  }
 }
 
 @layer utilities {
@@ -24,11 +32,11 @@
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+    @apply bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
   }
   
   .btn-secondary {
-    @apply bg-white text-purple-600 font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl border-2 border-purple-600 transform hover:scale-105 transition-all duration-200;
+    @apply bg-white text-purple-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl border-2 border-purple-600 transform hover:scale-105 transition-all duration-200;
   }
   
   /* Responsive utilities - apenas altura */
