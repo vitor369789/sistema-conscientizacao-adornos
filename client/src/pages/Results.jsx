@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Trophy, Star, CheckCircle, XCircle, Home } from 'lucide-react';
@@ -8,6 +8,7 @@ function Results() {
   const navigate = useNavigate();
   const [results, setResults] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const hasSubmitted = useRef(false);
 
   useEffect(() => {
     const data = localStorage.getItem('quizResults');
@@ -18,7 +19,11 @@ function Results() {
     const parsedResults = JSON.parse(data);
     setResults(parsedResults);
     
-    handleSubmit(parsedResults);
+    // Submeter apenas uma vez
+    if (!hasSubmitted.current) {
+      hasSubmitted.current = true;
+      handleSubmit(parsedResults);
+    }
   }, [navigate]);
 
   useEffect(() => {
