@@ -4,10 +4,15 @@ import { motion } from 'framer-motion';
 import { Trophy, Star, CheckCircle, XCircle, Home } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const API_URL = import.meta.env.VITE_API_URL?.includes('d36.com.br') 
+  ? import.meta.env.VITE_API_URL + '/api'
+  : 'http://localhost:4001/api';
+
 function Results() {
   const navigate = useNavigate();
   const [results, setResults] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [finalMessage, setFinalMessage] = useState('');
   const hasSubmitted = useRef(false);
 
   useEffect(() => {
@@ -24,7 +29,22 @@ function Results() {
       hasSubmitted.current = true;
       handleSubmit(parsedResults);
     }
+
+    // Fetch final message
+    fetchFinalMessage();
   }, [navigate]);
+
+  const fetchFinalMessage = async () => {
+    try {
+      const response = await fetch(`${API_URL}/config`);
+      const data = await response.json();
+      if (data.final_message) {
+        setFinalMessage(data.final_message);
+      }
+    } catch (error) {
+      console.error('Error fetching final message:', error);
+    }
+  };
 
   useEffect(() => {
     if (results && results.score >= results.totalQuestions * 0.7) {
@@ -192,33 +212,22 @@ function Results() {
                 transition={{ delay: 0.9 }}
                 className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-xl p-8 mb-6 text-center"
               >
-                <h3 className="text-2xl font-bold text-purple-900 mb-4">
-                  🎯 CONSCIENTIZAÇÃO - ADORNO ZERO
-                </h3>
-                <div className="space-y-3 text-gray-800 text-lg">
-                  <p className="font-semibold text-purple-700">
-                    "Adorno não é detalhe."
-                  </p>
-                  <p>
-                    Aqui, o cuidado começa antes do contato.
-                  </p>
-                  <p>
-                    Pequenos detalhes podem interferir na segurança de todos.
-                  </p>
-                  <p className="text-purple-800 font-semibold mt-4">
-                    A SCIH orienta, apoia e conta com você para um ambiente mais seguro.
-                  </p>
-                  <div className="mt-6 pt-4 border-t-2 border-purple-200">
-                    <p className="text-3xl font-bold text-purple-600 mb-2">
-                      VAMOS JUNTOS NESSA?
-                    </p>
-                    <p className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      ADORNO ZERO! 🚫
-                    </p>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-4 italic">
-                    📖 Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde
-                  </p>
+                <div className="text-gray-800 text-lg whitespace-pre-line">
+                  {finalMessage || `🎯 CONSCIENTIZAÇÃO - ADORNO ZERO
+
+"Adorno não é detalhe."
+
+Aqui, o cuidado começa antes do contato.
+
+Pequenos detalhes podem interferir na segurança de todos.
+
+A SCIH orienta, apoia e conta com você para um ambiente mais seguro.
+
+VAMOS JUNTOS NESSA?
+
+ADORNO ZERO! 🚫
+
+📖 Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde`}
                 </div>
               </motion.div>
 

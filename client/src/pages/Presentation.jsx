@@ -171,11 +171,9 @@ function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState(defaultSlides);
   const [loading, setLoading] = useState(true);
-  const [finalMessage, setFinalMessage] = useState('');
 
   useEffect(() => {
     fetchSlides();
-    fetchFinalMessage();
   }, []);
 
   const fetchSlides = async () => {
@@ -196,23 +194,6 @@ function Presentation() {
       console.error('Error fetching slides, using defaults:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchFinalMessage = async () => {
-    try {
-      console.log('Fetching final message from:', `${API_URL}/config`);
-      const response = await fetch(`${API_URL}/config`);
-      const data = await response.json();
-      console.log('Config data received:', data);
-      if (data.final_message) {
-        console.log('Final message set:', data.final_message);
-        setFinalMessage(data.final_message);
-      } else {
-        console.log('No final_message in config data');
-      }
-    } catch (error) {
-      console.error('Error fetching final message:', error);
     }
   };
 
@@ -352,34 +333,17 @@ function Presentation() {
                   transition={{ delay: 0.4 }}
                   className="space-y-4"
                 >
-                  {/* Use finalMessage for last slide if available, otherwise use slide.content */}
-                  {console.log('Current slide:', currentSlide, 'Total slides:', slides.length, 'Is last slide:', currentSlide === slides.length - 1, 'Final message:', finalMessage ? 'exists' : 'empty')}
-                  {console.log('Rendering:', (currentSlide === slides.length - 1 && finalMessage) ? 'FINAL MESSAGE' : 'NORMAL CONTENT')}
-                  {(currentSlide === slides.length - 1 && finalMessage) ? (
-                    <div>
-                      {console.log('RENDERING FINAL MESSAGE DIV')}
-                      <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="bg-white/50 backdrop-blur-sm rounded-xl p-6 text-lg text-gray-700 hover:bg-white/70 transition-all whitespace-pre-line"
-                      >
-                        {finalMessage}
-                      </motion.div>
-                    </div>
-                  ) : (
-                    slide.content.map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 + index * 0.1 }}
-                        className="bg-white/50 backdrop-blur-sm rounded-xl p-4 text-lg text-gray-700 hover:bg-white/70 transition-all"
-                      >
-                        {item}
-                      </motion.div>
-                    ))
-                  )}
+                  {slide.content.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 + index * 0.1 }}
+                      className="bg-white/50 backdrop-blur-sm rounded-xl p-4 text-lg text-gray-700 hover:bg-white/70 transition-all"
+                    >
+                      {item}
+                    </motion.div>
+                  ))}
                 </motion.div>
               </div>
             </motion.div>
