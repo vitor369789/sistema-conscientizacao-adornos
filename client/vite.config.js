@@ -8,6 +8,11 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       port: parseInt(env.VITE_PORT) || 3000,
+      host: '0.0.0.0', // Permite acesso externo
+      hmr: {
+        clientPort: 443, // Porta HTTPS para WebSocket
+        protocol: 'wss', // WebSocket seguro
+      },
     },
   }
 })
