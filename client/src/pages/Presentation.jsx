@@ -171,9 +171,11 @@ function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState(defaultSlides);
   const [loading, setLoading] = useState(true);
+  const [finalMessage, setFinalMessage] = useState('');
 
   useEffect(() => {
     fetchSlides();
+    fetchFinalMessage();
   }, []);
 
   const fetchSlides = async () => {
@@ -194,6 +196,18 @@ function Presentation() {
       console.error('Error fetching slides, using defaults:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchFinalMessage = async () => {
+    try {
+      const response = await fetch(`${API_URL}/config`);
+      const data = await response.json();
+      if (data.final_message) {
+        setFinalMessage(data.final_message);
+      }
+    } catch (error) {
+      console.error('Error fetching final message:', error);
     }
   };
 
@@ -333,17 +347,29 @@ function Presentation() {
                   transition={{ delay: 0.4 }}
                   className="space-y-4"
                 >
-                  {slide.content.map((item, index) => (
+                  {/* Use finalMessage for last slide if available, otherwise use slide.content */}
+                  {(currentSlide === slides.length - 1 && finalMessage) ? (
                     <motion.div
-                      key={index}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                      className="bg-white/50 backdrop-blur-sm rounded-xl p-4 text-lg text-gray-700 hover:bg-white/70 transition-all"
+                      transition={{ delay: 0.5 }}
+                      className="bg-white/50 backdrop-blur-sm rounded-xl p-6 text-lg text-gray-700 hover:bg-white/70 transition-all whitespace-pre-line"
                     >
-                      {item}
+                      {finalMessage}
                     </motion.div>
-                  ))}
+                  ) : (
+                    slide.content.map((item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 + index * 0.1 }}
+                        className="bg-white/50 backdrop-blur-sm rounded-xl p-4 text-lg text-gray-700 hover:bg-white/70 transition-all"
+                      >
+                        {item}
+                      </motion.div>
+                    ))
+                  )}
                 </motion.div>
               </div>
             </motion.div>
