@@ -120,7 +120,7 @@ function AdminDashboard() {
       canvas.width = svgSize;
       canvas.height = svgSize;
       
-      const img = new Image();
+      const img = new window.Image();
       
       img.onload = () => {
         ctx.fillStyle = 'white';
