@@ -104,25 +104,50 @@ function AdminDashboard() {
   };
 
   const handleDownloadQR = () => {
-    const svg = document.getElementById('qr-code-svg');
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      const pngFile = canvas.toDataURL('image/png');
+    try {
+      const svg = document.getElementById('qr-code-svg');
+      if (!svg) {
+        alert('QR Code não encontrado. Abra o modal do QR Code primeiro.');
+        return;
+      }
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
       
-      const downloadLink = document.createElement('a');
-      downloadLink.download = 'qrcode-adornos.png';
-      downloadLink.href = pngFile;
-      downloadLink.click();
-    };
-    
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+      // Set canvas size based on SVG size
+      const svgSize = 256; // QRCodeSVG default size
+      canvas.width = svgSize;
+      canvas.height = svgSize;
+      
+      const img = new Image();
+      
+      img.onload = () => {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const downloadLink = document.createElement('a');
+          downloadLink.download = 'qrcode-adornos.png';
+          downloadLink.href = url;
+          downloadLink.click();
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      };
+      
+      img.onerror = () => {
+        alert('Erro ao converter QR Code. Tente novamente.');
+      };
+      
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      img.src = url;
+    } catch (error) {
+      console.error('Error downloading QR code:', error);
+      alert('Erro ao baixar QR Code. Verifique o console para mais detalhes.');
+    }
   };
 
   const handlePrintPoster = () => {
