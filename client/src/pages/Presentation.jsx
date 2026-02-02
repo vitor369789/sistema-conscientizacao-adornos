@@ -354,15 +354,19 @@ function Presentation() {
                 >
                   {/* Use finalMessage for last slide if available, otherwise use slide.content */}
                   {console.log('Current slide:', currentSlide, 'Total slides:', slides.length, 'Is last slide:', currentSlide === slides.length - 1, 'Final message:', finalMessage ? 'exists' : 'empty')}
+                  {console.log('Rendering:', (currentSlide === slides.length - 1 && finalMessage) ? 'FINAL MESSAGE' : 'NORMAL CONTENT')}
                   {(currentSlide === slides.length - 1 && finalMessage) ? (
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 }}
-                      className="bg-white/50 backdrop-blur-sm rounded-xl p-6 text-lg text-gray-700 hover:bg-white/70 transition-all whitespace-pre-line"
-                    >
-                      {finalMessage}
-                    </motion.div>
+                    <div>
+                      {console.log('RENDERING FINAL MESSAGE DIV')}
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="bg-white/50 backdrop-blur-sm rounded-xl p-6 text-lg text-gray-700 hover:bg-white/70 transition-all whitespace-pre-line"
+                      >
+                        {finalMessage}
+                      </motion.div>
+                    </div>
                   ) : (
                     slide.content.map((item, index) => (
                       <motion.div
