@@ -56,11 +56,11 @@ function SiteConfigManager({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-3xl p-8 max-w-2xl w-full relative"
+        className="bg-white rounded-3xl p-8 max-w-2xl w-full relative my-8 max-h-[90vh] overflow-y-auto"
       >
         <button
           onClick={onClose}
