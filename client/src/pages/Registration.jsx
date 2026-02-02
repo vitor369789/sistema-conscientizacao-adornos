@@ -11,6 +11,11 @@ function Registration() {
     formation: '',
     phone: ''
   });
+  const [logo1Error, setLogo1Error] = useState(false);
+  const [logo2Error, setLogo2Error] = useState(false);
+  const [logo3Error, setLogo3Error] = useState(false);
+  const [logo4Error, setLogo4Error] = useState(false);
+  const [logo5Error, setLogo5Error] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,11 +44,40 @@ function Registration() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="flex justify-center mb-6"
+          className="flex justify-center items-center gap-6 mb-6 flex-wrap"
         >
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-full">
-            <Sparkles className="w-12 h-12 text-white" />
-          </div>
+          {/* Renderizar logos do cabeçalho (1, 2, 3) */}
+          {!logo1Error && (
+            <img 
+              src="/logo.png" 
+              alt="Logo 1" 
+              className="h-24 w-auto object-contain"
+              onError={() => setLogo1Error(true)}
+            />
+          )}
+          {!logo2Error && (
+            <img 
+              src="/logo2.png" 
+              alt="Logo 2" 
+              className="h-24 w-auto object-contain"
+              onError={() => setLogo2Error(true)}
+            />
+          )}
+          {!logo3Error && (
+            <img 
+              src="/logo3.png" 
+              alt="Logo 3" 
+              className="h-24 w-auto object-contain"
+              onError={() => setLogo3Error(true)}
+            />
+          )}
+          
+          {/* Se nenhuma logo do cabeçalho existe, mostrar ícone padrão */}
+          {logo1Error && logo2Error && logo3Error && (
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-full">
+              <Sparkles className="w-12 h-12 text-white" />
+            </div>
+          )}
         </motion.div>
 
         <motion.h1
@@ -171,6 +205,51 @@ function Registration() {
           >
             Acesso Administrativo
           </a>
+        </motion.div>
+
+        {/* Footer com logos adicionais e crédito do desenvolvedor */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1 }}
+          className="mt-8 pt-6 border-t border-gray-200"
+        >
+          <div className="flex items-center justify-between gap-4">
+            {/* Logo 4 - Esquerda */}
+            <div className="flex-shrink-0">
+              {!logo4Error ? (
+                <img 
+                  src="/logo4.png" 
+                  alt="Logo 4" 
+                  className="h-12 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                  onError={() => setLogo4Error(true)}
+                />
+              ) : (
+                <div className="w-12"></div>
+              )}
+            </div>
+
+            {/* Texto central - Desenvolvido por iCore Soluções */}
+            <div className="flex-grow text-center">
+              <p className="text-xs text-gray-500">
+                Desenvolvido por <span className="font-semibold text-purple-600">iCore Soluções</span>
+              </p>
+            </div>
+
+            {/* Logo 5 - Direita */}
+            <div className="flex-shrink-0">
+              {!logo5Error ? (
+                <img 
+                  src="/logo5.png" 
+                  alt="Logo 5" 
+                  className="h-12 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                  onError={() => setLogo5Error(true)}
+                />
+              ) : (
+                <div className="w-12"></div>
+              )}
+            </div>
+          </div>
         </motion.div>
       </motion.div>
     </div>
