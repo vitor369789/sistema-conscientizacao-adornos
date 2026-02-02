@@ -201,10 +201,15 @@ function Presentation() {
 
   const fetchFinalMessage = async () => {
     try {
+      console.log('Fetching final message from:', `${API_URL}/config`);
       const response = await fetch(`${API_URL}/config`);
       const data = await response.json();
+      console.log('Config data received:', data);
       if (data.final_message) {
+        console.log('Final message set:', data.final_message);
         setFinalMessage(data.final_message);
+      } else {
+        console.log('No final_message in config data');
       }
     } catch (error) {
       console.error('Error fetching final message:', error);
@@ -348,6 +353,7 @@ function Presentation() {
                   className="space-y-4"
                 >
                   {/* Use finalMessage for last slide if available, otherwise use slide.content */}
+                  {console.log('Current slide:', currentSlide, 'Total slides:', slides.length, 'Is last slide:', currentSlide === slides.length - 1, 'Final message:', finalMessage ? 'exists' : 'empty')}
                   {(currentSlide === slides.length - 1 && finalMessage) ? (
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
