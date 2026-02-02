@@ -20,6 +20,23 @@ module.exports = {
       min_uptime: '10s',
       watch: false,
       ignore_watch: ['node_modules', 'logs', 'client'],
+    },
+    {
+      name: 'adornos-frontend',
+      script: 'npm',
+      args: 'run client',
+      cwd: './',
+      instances: 1,
+      exec_mode: 'fork',
+      env: {
+        NODE_ENV: 'development',
+      },
+      error_file: './logs/frontend-error.log',
+      out_file: './logs/frontend-out.log',
+      log_file: './logs/frontend-combined.log',
+      time: true,
+      autorestart: true,
+      watch: false,
     }
   ]
 };
