@@ -5,7 +5,7 @@
 @layer base {
   html {
     overflow-x: hidden;
-    font-size: 14px; /* Reduz base de 16px para 14px (~12.5% redução) */
+    font-size: 85%; /* Reduz 15% do tamanho base */
   }
   
   body {
@@ -16,12 +16,18 @@
   
   #root {
     overflow-x: hidden;
+    transform: scale(0.85); /* Reduz 15% do tamanho geral */
+    transform-origin: top center;
+    width: 117.65%; /* Compensa a redução (100/0.85) */
+    margin-left: -8.825%; /* Centraliza (17.65/2) */
   }
   
-  /* Redução adicional para mobile */
   @media (max-width: 768px) {
-    html {
-      font-size: 12px; /* Reduz ainda mais no mobile (~25% redução) */
+    #root {
+      transform: scale(0.85);
+      transform-origin: top center;
+      width: 117.65%;
+      margin-left: -8.825%;
     }
   }
 }
@@ -32,11 +38,11 @@
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+    @apply bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
   }
   
   .btn-secondary {
-    @apply bg-white text-purple-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl border-2 border-purple-600 transform hover:scale-105 transition-all duration-200;
+    @apply bg-white text-purple-600 font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl border-2 border-purple-600 transform hover:scale-105 transition-all duration-200;
   }
   
   /* Responsive utilities - apenas altura */
