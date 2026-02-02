@@ -11,7 +11,21 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Scroll imediato para o topo
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+    
+    // Fallback para garantir scroll em mobile
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Timeout adicional para garantir em dispositivos lentos
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
   }, [pathname]);
 
   return null;

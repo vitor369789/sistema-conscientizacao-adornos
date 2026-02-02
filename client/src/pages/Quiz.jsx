@@ -161,6 +161,15 @@ function Quiz() {
   };
 
   const handleNext = () => {
+    // Scroll para o topo antes de mudar de pergunta
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);

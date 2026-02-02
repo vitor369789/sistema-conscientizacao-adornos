@@ -98,6 +98,15 @@ function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
+    // Scroll para o topo antes de mudar de slide
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
@@ -127,6 +136,15 @@ function Presentation() {
   };
 
   const prevSlide = () => {
+    // Scroll para o topo antes de mudar de slide
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
     if (currentSlide > 0) {
       setCurrentSlide(currentSlide - 1);
     }
