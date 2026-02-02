@@ -1,9 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, Trophy, Clock } from 'lucide-react';
 
-const questions = [
+// Função para embaralhar array
+const shuffleArray = (array) => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
+const questionsOriginal = [
   {
     id: 1,
     question: 'Por que devemos evitar o uso de anéis no ambiente de trabalho?',
@@ -133,6 +143,29 @@ function Quiz() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [score, setScore] = useState(0);
+  const [questions, setQuestions] = useState([]);
+
+  // Embaralhar respostas ao carregar o componente
+  useEffect(() => {
+    const shuffledQuestions = questionsOriginal.map(q => {
+      const correctAnswer = q.options[q.correct];
+      const shuffledOptions = shuffleArray(q.options);
+      const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
+      
+      return {
+        ...q,
+        options: shuffledOptions,
+        correct: newCorrectIndex
+      };
+    });
+    setQuestions(shuffledQuestions);
+  }, []);
+
+  if (questions.length === 0) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="text-2xl font-bold text-purple-600">Carregando...</div>
+    </div>;
+  }
 
   const question = questions[currentQuestion];
 
