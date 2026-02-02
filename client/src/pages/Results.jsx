@@ -33,7 +33,8 @@ function Results() {
 
   const handleSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:3001/api/submit', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+      const response = await fetch(`${apiUrl}/api/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

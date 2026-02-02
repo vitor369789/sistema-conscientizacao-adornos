@@ -28,10 +28,11 @@ function AdminDashboard() {
 
   const fetchData = async () => {
     try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4001';
       const [participantsRes, viewersRes, statsRes] = await Promise.all([
-        fetch('http://localhost:3001/api/participants'),
-        fetch('http://localhost:3001/api/viewers'),
-        fetch('http://localhost:3001/api/stats')
+        fetch(`${apiUrl}/api/participants`),
+        fetch(`${apiUrl}/api/viewers`),
+        fetch(`${apiUrl}/api/stats`)
       ]);
 
       const participantsData = await participantsRes.json();
@@ -61,9 +62,10 @@ function AdminDashboard() {
     if (!confirm(message)) return;
 
     try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4001';
       const endpoint = type === 'participant' 
-        ? `http://localhost:3001/api/participants/${id}`
-        : `http://localhost:3001/api/viewers/${id}`;
+        ? `${apiUrl}/api/participants/${id}`
+        : `${apiUrl}/api/viewers/${id}`;
       
       await fetch(endpoint, {
         method: 'DELETE'

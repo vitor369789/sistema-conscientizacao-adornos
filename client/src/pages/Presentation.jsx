@@ -118,7 +118,8 @@ function Presentation() {
     const userData = JSON.parse(localStorage.getItem('userData'));
     
     try {
-      await fetch('http://localhost:3001/api/presentation-view', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+      await fetch(`${apiUrl}/api/presentation-view`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
