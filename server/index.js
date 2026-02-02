@@ -110,7 +110,8 @@ db.exec(`
 // Insert default config values if not exists
 const defaultConfigs = [
   { key: 'site_title', value: 'Conscientização sobre Adornos' },
-  { key: 'welcome_message', value: 'Bem-vindo! Vamos começar uma jornada interativa de aprendizado' }
+  { key: 'welcome_message', value: 'Bem-vindo! Vamos começar uma jornada interativa de aprendizado' },
+  { key: 'final_message', value: 'CONSCIENTIZAÇÃO - ADORNO ZERO\n"Adorno não é detalhe."\n\nAqui, o cuidado começa antes do contato.\n\nPequenos detalhes podem interferir na segurança de todos.\n\nA SCIH orienta, apoia e conta com você para um ambiente mais seguro.\n\nVAMOS JUNTOS NESSA?\n\nADORNO ZERO! 🚫\n\n📖 Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde' }
 ];
 
 defaultConfigs.forEach(config => {
@@ -364,7 +365,7 @@ app.get('/api/config', (req, res) => {
 
 app.put('/api/config', (req, res) => {
   try {
-    const { site_title, welcome_message } = req.body;
+    const { site_title, welcome_message, final_message } = req.body;
     
     if (site_title) {
       db.prepare(`
@@ -388,6 +389,18 @@ app.put('/api/config', (req, res) => {
           CURRENT_TIMESTAMP
         )
       `).run(welcome_message);
+    }
+    
+    if (final_message) {
+      db.prepare(`
+        INSERT OR REPLACE INTO site_config (id, config_key, config_value, updated_at)
+        VALUES (
+          (SELECT id FROM site_config WHERE config_key = 'final_message'),
+          'final_message',
+          ?,
+          CURRENT_TIMESTAMP
+        )
+      `).run(final_message);
     }
     
     res.json({ success: true });

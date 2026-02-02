@@ -9,7 +9,8 @@ const API_URL = import.meta.env.VITE_API_URL?.includes('d36.com.br')
 function SiteConfigManager({ onClose }) {
   const [config, setConfig] = useState({
     site_title: '',
-    welcome_message: ''
+    welcome_message: '',
+    final_message: ''
   });
   const [loading, setLoading] = useState(true);
 
@@ -102,6 +103,22 @@ function SiteConfigManager({ onClose }) {
             />
             <p className="text-xs text-gray-500 mt-1">
               Mensagem exibida na página inicial
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Mensagem Final (Aviso de Conscientização)
+            </label>
+            <textarea
+              value={config.final_message}
+              onChange={(e) => setConfig({ ...config, final_message: e.target.value })}
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+              rows="10"
+              placeholder="Ex: CONSCIENTIZAÇÃO - ADORNO ZERO..."
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Mensagem exibida ao final da apresentação
             </p>
           </div>
 
