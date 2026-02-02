@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { QRCodeSVG } from 'qrcode.react';
 import { 
   Users, TrendingUp, Award, Calendar, 
   LogOut, Printer, Trash2, Search, 
-  BarChart3, CheckCircle, XCircle, Filter
+  BarChart3, CheckCircle, XCircle, Filter, QrCode, Download, X
 } from 'lucide-react';
 
 function AdminDashboard() {
@@ -16,6 +17,7 @@ function AdminDashboard() {
   const [filterSector, setFilterSector] = useState('all');
   const [viewMode, setViewMode] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   useEffect(() => {
     const isAuth = localStorage.getItem('adminAuth');
@@ -78,6 +80,28 @@ function AdminDashboard() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadQR = () => {
+    const svg = document.getElementById('qr-code-svg');
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL('image/png');
+      
+      const downloadLink = document.createElement('a');
+      downloadLink.download = 'qrcode-adornos.png';
+      downloadLink.href = pngFile;
+      downloadLink.click();
+    };
+    
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   };
 
   const filteredParticipants = participants.filter(p => {
@@ -167,6 +191,15 @@ function AdminDashboard() {
             </motion.div>
 
             <div className="flex gap-3">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowQRCode(true)}
+                className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <QrCode className="w-5 h-5" />
+                QR Code
+              </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -602,6 +635,71 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* QR Code Modal */}
+      {showQRCode && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-8 max-w-md w-full relative"
+          >
+            <button
+              onClick={() => setShowQRCode(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              QR Code de Acesso
+            </h2>
+            <p className="text-center text-gray-600 mb-6">
+              Escaneie para acessar o sistema
+            </p>
+
+            <div className="flex justify-center mb-6 bg-white p-6 rounded-xl border-4 border-purple-200">
+              <QRCodeSVG
+                id="qr-code-svg"
+                value={window.location.origin}
+                size={256}
+                level="H"
+                includeMargin={true}
+                bgColor="#ffffff"
+                fgColor="#7c3aed"
+              />
+            </div>
+
+            <div className="text-center mb-6">
+              <p className="text-sm text-gray-600 mb-1">URL de Acesso:</p>
+              <p className="text-lg font-semibold text-purple-600 break-all">
+                {window.location.origin}
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleDownloadQR}
+                className="flex-1 flex items-center justify-center gap-2 bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <Download className="w-5 h-5" />
+                Baixar QR Code
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.print()}
+                className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Printer className="w-5 h-5" />
+                Imprimir
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
