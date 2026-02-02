@@ -25,11 +25,6 @@
       width: 100% !important;
       margin-left: 0 !important;
     }
-    
-    /* Hide everything except QR code modal when printing */
-    body > div:not(.fixed) {
-      display: none !important;
-    }
   }
   
   #root {
