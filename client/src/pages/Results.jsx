@@ -212,23 +212,93 @@ function Results() {
                 transition={{ delay: 0.9 }}
                 className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-xl p-8 mb-6 text-center"
               >
-                <div className="text-gray-800 text-lg whitespace-pre-line">
-                  {finalMessage || `🎯 CONSCIENTIZAÇÃO - ADORNO ZERO
-
-"Adorno não é detalhe."
-
-Aqui, o cuidado começa antes do contato.
-
-Pequenos detalhes podem interferir na segurança de todos.
-
-A SCIH orienta, apoia e conta com você para um ambiente mais seguro.
-
-VAMOS JUNTOS NESSA?
-
-ADORNO ZERO! 🚫
-
-📖 Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde`}
-                </div>
+                {finalMessage ? (
+                  <div className="space-y-3 text-gray-800 text-lg">
+                    {finalMessage.split('\n').map((line, index) => {
+                      // Title line (first line or lines with CONSCIENTIZAÇÃO, ADORNO ZERO, VAMOS JUNTOS)
+                      if (line.includes('CONSCIENTIZAÇÃO') || line.includes('ADORNO ZERO') && !line.includes('📖')) {
+                        return (
+                          <h3 key={index} className="text-2xl font-bold text-purple-900">
+                            {line}
+                          </h3>
+                        );
+                      }
+                      // Quote lines (with quotes)
+                      else if (line.includes('"')) {
+                        return (
+                          <p key={index} className="font-semibold text-purple-700">
+                            {line}
+                          </p>
+                        );
+                      }
+                      // Call to action (VAMOS JUNTOS)
+                      else if (line.includes('VAMOS JUNTOS')) {
+                        return (
+                          <p key={index} className="text-3xl font-bold text-purple-600 mt-6">
+                            {line}
+                          </p>
+                        );
+                      }
+                      // Final emphasis with emoji
+                      else if (line.includes('🚫')) {
+                        return (
+                          <p key={index} className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            {line}
+                          </p>
+                        );
+                      }
+                      // Legal base
+                      else if (line.includes('📖') || line.includes('Base legal')) {
+                        return (
+                          <p key={index} className="text-sm text-gray-600 mt-4 italic">
+                            {line}
+                          </p>
+                        );
+                      }
+                      // SCIH line
+                      else if (line.includes('SCIH')) {
+                        return (
+                          <p key={index} className="text-purple-800 font-semibold mt-4">
+                            {line}
+                          </p>
+                        );
+                      }
+                      // Empty lines
+                      else if (line.trim() === '') {
+                        return <div key={index} className="h-2"></div>;
+                      }
+                      // Regular lines
+                      else {
+                        return <p key={index}>{line}</p>;
+                      }
+                    })}
+                  </div>
+                ) : (
+                  <div className="space-y-3 text-gray-800 text-lg">
+                    <h3 className="text-2xl font-bold text-purple-900 mb-4">
+                      🎯 CONSCIENTIZAÇÃO - ADORNO ZERO
+                    </h3>
+                    <p className="font-semibold text-purple-700">
+                      "Adorno não é detalhe."
+                    </p>
+                    <p>Aqui, o cuidado começa antes do contato.</p>
+                    <p>Pequenos detalhes podem interferir na segurança de todos.</p>
+                    <p className="text-purple-800 font-semibold mt-4">
+                      A SCIH orienta, apoia e conta com você para um ambiente mais seguro.
+                    </p>
+                    <div className="mt-6 pt-4 border-t-2 border-purple-200">
+                      <p className="text-3xl font-bold text-purple-600 mb-2">
+                        VAMOS JUNTOS NESSA?
+                      </p>
+                      <p className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        ADORNO ZERO! 🚫
+                      </p>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-4 italic">
+                      📖 Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde
+                    </p>
+                  </div>
+                )}
               </motion.div>
 
               {submitted && (
