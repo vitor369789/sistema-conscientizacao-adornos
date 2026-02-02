@@ -172,10 +172,10 @@ function Results() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="bg-blue-50 border-2 border-blue-300 rounded-xl p-6 mb-8"
+                className="bg-blue-50 border-2 border-blue-300 rounded-xl p-6 mb-6"
               >
                 <h3 className="font-bold text-blue-900 mb-2">📋 Informações do Participante</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-blue-800">
@@ -183,6 +183,42 @@ function Results() {
                   <p><span className="font-semibold">Setor:</span> {results.sector}</p>
                   <p><span className="font-semibold">Formação:</span> {results.formation}</p>
                   <p><span className="font-semibold">Telefone:</span> {results.phone}</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 }}
+                className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-xl p-8 mb-6 text-center"
+              >
+                <h3 className="text-2xl font-bold text-purple-900 mb-4">
+                  🎯 CONSCIENTIZAÇÃO - ADORNO ZERO
+                </h3>
+                <div className="space-y-3 text-gray-800 text-lg">
+                  <p className="font-semibold text-purple-700">
+                    "Adorno não é detalhe."
+                  </p>
+                  <p>
+                    Aqui, o cuidado começa antes do contato.
+                  </p>
+                  <p>
+                    Pequenos detalhes podem interferir na segurança de todos.
+                  </p>
+                  <p className="text-purple-800 font-semibold mt-4">
+                    A SCIH orienta, apoia e conta com você para um ambiente mais seguro.
+                  </p>
+                  <div className="mt-6 pt-4 border-t-2 border-purple-200">
+                    <p className="text-3xl font-bold text-purple-600 mb-2">
+                      VAMOS JUNTOS NESSA?
+                    </p>
+                    <p className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      ADORNO ZERO! 🚫
+                    </p>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-4 italic">
+                    📖 Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde
+                  </p>
                 </div>
               </motion.div>
 

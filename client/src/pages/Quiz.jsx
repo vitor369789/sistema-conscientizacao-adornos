@@ -16,78 +16,66 @@ const shuffleArray = (array) => {
 const questionsOriginal = [
   {
     id: 1,
+    question: 'Anel, aliança ou alargador: pode durante a assistência?',
+    options: [
+      'Pode, se for discreto',
+      'Pode, se higienizar bem',
+      'Não pode',
+      'Pode, apenas aliança de casamento'
+    ],
+    correct: 2,
+    explanation: 'Anéis e alianças dificultam a higienização das mãos e favorecem a permanência de microrganismos. Base legal: NR-32 e diretrizes da ANVISA.'
+  },
+  {
+    id: 2,
+    question: 'Relógio no punho durante o plantão: permitido?',
+    options: [
+      'Sim, se for digital',
+      'Não',
+      'Sim, se for de silicone',
+      'Sim, se higienizar antes'
+    ],
+    correct: 1,
+    explanation: 'O relógio impede a correta higiene das mãos e antebraços, aumentando o risco de contaminação cruzada. Base legal: NR-32.'
+  },
+  {
+    id: 3,
+    question: 'Unha alongada ou esmalte: qual o risco real?',
+    options: [
+      'Nenhum risco',
+      'Abriga microrganismos e dificulta a higienização',
+      'Apenas questão estética',
+      'Risco apenas se estiver descascado'
+    ],
+    correct: 1,
+    explanation: 'Unhas longas e esmaltes favorecem o acúmulo de microrganismos e dificultam a higiene das mãos, aumentando o risco de infecção. Por isso, não são permitidos na assistência.'
+  },
+  {
+    id: 4,
+    question: 'Brincos, pulseiras e colares no setor assistencial: pode?',
+    options: [
+      'Pode, se forem pequenos',
+      'Não. Há risco biológico e de acidente',
+      'Pode, se estiverem escondidos',
+      'Pode apenas brincos pequenos'
+    ],
+    correct: 1,
+    explanation: 'Não. Além do risco biológico, há risco de acidente e quebra de barreira de proteção. Base legal: NR-32 e protocolos da SCIH.'
+  },
+  {
+    id: 5,
     question: 'Por que devemos evitar o uso de anéis no ambiente de trabalho?',
     options: [
-      'Porque podem enroscar em máquinas e causar lesões graves',
+      'Podem enroscar em máquinas e causar lesões graves',
       'Porque são caros e podem ser perdidos',
       'Porque não combinam com o uniforme',
       'Porque podem arranhar as mesas'
     ],
     correct: 0,
-    explanation: 'Anéis podem enroscar em equipamentos e causar lesões por arrancamento (degloving), esmagamento ou até amputação.'
-  },
-  {
-    id: 2,
-    question: 'Qual é o principal risco de usar relógios metálicos em áreas com eletricidade?',
-    options: [
-      'Podem parar de funcionar',
-      'Podem conduzir corrente elétrica e causar choque',
-      'Podem arranhar os equipamentos',
-      'Podem atrapalhar a visão do tempo'
-    ],
-    correct: 1,
-    explanation: 'Metais conduzem eletricidade. Um relógio metálico pode criar um caminho para a corrente elétrica, causando choques graves ou fatais.'
-  },
-  {
-    id: 3,
-    question: 'Qual dessas opções NÃO é considerada um adorno perigoso?',
-    options: [
-      'Colar comprido',
-      'Brincos grandes',
-      'Óculos de segurança',
-      'Pulseiras'
-    ],
-    correct: 2,
-    explanation: 'Óculos de segurança são EPIs (Equipamentos de Proteção Individual) e são obrigatórios em muitas áreas. Não são adornos.'
-  },
-  {
-    id: 4,
-    question: 'O que fazer com seus adornos antes de começar o trabalho?',
-    options: [
-      'Esconder debaixo do uniforme',
-      'Remover e guardar em local seguro',
-      'Deixar no carro',
-      'Usar apenas um de cada vez'
-    ],
-    correct: 1,
-    explanation: 'A única forma segura é remover completamente todos os adornos e guardá-los em local seguro antes de iniciar as atividades.'
-  },
-  {
-    id: 5,
-    question: 'Unhas postiças ou muito longas podem causar qual problema?',
-    options: [
-      'Apenas problemas estéticos',
-      'Nenhum problema se forem bem feitas',
-      'Podem quebrar, contaminar produtos ou enroscar em equipamentos',
-      'Apenas desconforto pessoal'
-    ],
-    correct: 2,
-    explanation: 'Unhas longas podem quebrar e contaminar produtos, enroscar em máquinas, dificultar o uso de luvas e EPIs, além de acumular sujeira.'
+    explanation: 'Anéis podem enroscar em equipamentos e causar lesões por arrancamento (degloving), esmagamento ou até amputação. Base legal: NR-32.'
   },
   {
     id: 6,
-    question: 'Qual a porcentagem aproximada de acidentes de trabalho que envolvem adornos?',
-    options: [
-      '5%',
-      '15%',
-      '25%',
-      '35%'
-    ],
-    correct: 1,
-    explanation: 'Estudos indicam que aproximadamente 15% dos acidentes de trabalho têm relação com o uso de adornos.'
-  },
-  {
-    id: 7,
     question: 'Em áreas estéreis (como laboratórios ou saúde), por que adornos são proibidos?',
     options: [
       'Por questões de moda',
@@ -96,10 +84,10 @@ const questionsOriginal = [
       'Porque são desconfortáveis'
     ],
     correct: 1,
-    explanation: 'Adornos acumulam bactérias e microrganismos, podendo contaminar ambientes que precisam ser estéreis, como hospitais e laboratórios.'
+    explanation: 'Adornos acumulam bactérias e microrganismos, podendo contaminar ambientes que precisam ser estéreis, como hospitais e laboratórios. Base legal: NR-32 e ANVISA.'
   },
   {
-    id: 8,
+    id: 7,
     question: 'O que é "degloving"?',
     options: [
       'Um tipo de luva de segurança',
@@ -108,10 +96,10 @@ const questionsOriginal = [
       'Um procedimento de segurança'
     ],
     correct: 1,
-    explanation: 'Degloving é o arrancamento traumático da pele, comum quando anéis ficam presos em equipamentos ou durante quedas.'
+    explanation: 'Degloving é o arrancamento traumático da pele, comum quando anéis ficam presos em equipamentos ou durante quedas. É uma lesão grave que pode levar à amputação.'
   },
   {
-    id: 9,
+    id: 8,
     question: 'Qual a melhor atitude ao ver um colega usando adornos em área de risco?',
     options: [
       'Ignorar, não é problema meu',
@@ -120,10 +108,10 @@ const questionsOriginal = [
       'Apenas comentar com outros colegas'
     ],
     correct: 1,
-    explanation: 'Segurança é responsabilidade de todos. Alertar colegas de forma educada pode prevenir acidentes graves.'
+    explanation: 'Segurança é responsabilidade de todos. Alertar colegas de forma educada pode prevenir acidentes graves. A SCIH orienta, apoia e conta com você para um ambiente mais seguro.'
   },
   {
-    id: 10,
+    id: 9,
     question: 'Qual o principal objetivo das normas sobre adornos no trabalho?',
     options: [
       'Padronizar a aparência dos funcionários',
@@ -132,7 +120,19 @@ const questionsOriginal = [
       'Facilitar a identificação dos funcionários'
     ],
     correct: 1,
-    explanation: 'O objetivo principal é sempre a segurança e proteção da vida e integridade física de todos os trabalhadores.'
+    explanation: 'O objetivo principal é sempre a segurança e proteção da vida e integridade física de todos os trabalhadores. Base legal: NR-32 – Segurança e Saúde no Trabalho em Serviços de Saúde.'
+  },
+  {
+    id: 10,
+    question: 'Qual a política da instituição sobre adornos na assistência?',
+    options: [
+      'Uso moderado é permitido',
+      'ADORNO ZERO - nenhum adorno é permitido',
+      'Apenas alianças são permitidas',
+      'Depende do setor'
+    ],
+    correct: 1,
+    explanation: 'A política é ADORNO ZERO! Adorno não é detalhe. Aqui, o cuidado começa antes do contato. Pequenos detalhes podem interferir na segurança de todos. Vamos juntos nessa!'
   }
 ];
 
