@@ -18,6 +18,8 @@ client/.env.local
 # Logs
 *.log
 npm-debug.log*
+logs/
+.pm2/
 
 # OS files
 .DS_Store

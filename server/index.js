@@ -3,12 +3,16 @@ import cors from 'cors';
 import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import dotenv from 'dotenv';
+
+// Carrega variáveis de ambiente do arquivo .env na raiz do projeto
+dotenv.config({ path: join(dirname(fileURLToPath(import.meta.url)), '..', '.env') });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.API_PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
