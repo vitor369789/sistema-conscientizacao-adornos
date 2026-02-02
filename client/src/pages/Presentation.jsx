@@ -12,11 +12,10 @@ const slides = [
     color: 'from-blue-500 to-cyan-500',
     illustration: SafetyIllustration,
     content: [
-      '🏥 Adornos não são permitidos durante a assistência',
-      '🦠 O cuidado começa antes do contato com o paciente',
-      '⚠️ Pequenos detalhes podem interferir na segurança de todos',
-      '📖 Base legal: NR-32 - Segurança e Saúde no Trabalho em Serviços de Saúde',
-      '🎀 Qualquer adorno que dificulte a higienização'
+      'Adornos podem parecer inofensivos, mas em ambientes de trabalho podem representar sérios riscos',
+      'Vamos entender juntos por que a segurança deve sempre vir em primeiro lugar',
+      'Esta apresentação vai mostrar situações reais e como prevenir acidentes',
+      '📖 Base legal: NR-32 - Segurança e Saúde no Trabalho em Serviços de Saúde'
     ]
   },
   {
@@ -68,14 +67,13 @@ const slides = [
   {
     id: 5,
     title: 'Relógios no Punho: Permitido?',
-    icon: XCircle,
+    icon: AlertTriangle,
     color: 'from-orange-500 to-red-500',
     illustration: WatchIllustration,
     content: [
       '❌ NÃO é permitido durante o plantão',
       '🧼 Impede a correta higiene das mãos e antebraços',
       '🦠 Aumenta o risco de contaminação cruzada',
-      '⚡ Relógios metálicos já causaram choques elétricos fatais',
       '⚠️ Interfere na paramentação adequada',
       '📖 Base legal: NR-32 e protocolos da SCIH'
     ]
@@ -83,7 +81,7 @@ const slides = [
   {
     id: 6,
     title: 'Unhas e Esmaltes: Qual o Risco?',
-    icon: XCircle,
+    icon: AlertTriangle,
     color: 'from-pink-500 to-purple-500',
     illustration: WorkerIllustration,
     content: [
