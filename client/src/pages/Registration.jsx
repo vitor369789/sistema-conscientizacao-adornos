@@ -71,7 +71,7 @@ function Registration() {
           {/* Renderizar logos do cabeçalho (1, 2, 3) */}
           {!logo1Error && (
             <img 
-              src="/logo.png" 
+              src={`/logo.png?t=${Date.now()}`}
               alt="Logo 1" 
               className="h-24 w-auto object-contain"
               onError={() => setLogo1Error(true)}
@@ -79,7 +79,7 @@ function Registration() {
           )}
           {!logo2Error && (
             <img 
-              src="/logo2.png" 
+              src={`/logo2.png?t=${Date.now()}`}
               alt="Logo 2" 
               className="h-24 w-auto object-contain"
               onError={() => setLogo2Error(true)}
@@ -87,7 +87,7 @@ function Registration() {
           )}
           {!logo3Error && (
             <img 
-              src="/logo3.png" 
+              src={`/logo3.png?t=${Date.now()}`}
               alt="Logo 3" 
               className="h-24 w-auto object-contain"
               onError={() => setLogo3Error(true)}
