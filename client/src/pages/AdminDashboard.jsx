@@ -638,27 +638,35 @@ function AdminDashboard() {
 
       {/* QR Code Modal */}
       {showQRCode && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 print:bg-white print:relative print:p-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl p-8 max-w-md w-full relative"
+            className="bg-white rounded-2xl p-8 max-w-md w-full relative print:max-w-full print:rounded-none print:p-12"
           >
             <button
               onClick={() => setShowQRCode(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 print:hidden"
             >
               <X className="w-6 h-6" />
             </button>
 
-            <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            {/* Print-only header */}
+            <div className="hidden print:block text-center mb-8">
+              <h1 className="text-4xl font-bold text-purple-700 mb-4">
+                Sistema de Conscientização sobre Uso de Adornos
+              </h1>
+              <div className="w-32 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto mb-6"></div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent print:text-purple-700 print:text-3xl print:mb-4">
               QR Code de Acesso
             </h2>
-            <p className="text-center text-gray-600 mb-6">
+            <p className="text-center text-gray-600 mb-6 print:text-xl print:mb-8">
               Escaneie para acessar o sistema
             </p>
 
-            <div className="flex justify-center mb-6 bg-white p-6 rounded-xl border-4 border-purple-200">
+            <div className="flex justify-center mb-6 bg-white p-6 rounded-xl border-4 border-purple-200 print:border-8 print:p-8 print:mb-8">
               <QRCodeSVG
                 id="qr-code-svg"
                 value={window.location.origin}
@@ -667,17 +675,28 @@ function AdminDashboard() {
                 includeMargin={true}
                 bgColor="#ffffff"
                 fgColor="#7c3aed"
+                className="print:w-96 print:h-96"
               />
             </div>
 
-            <div className="text-center mb-6">
-              <p className="text-sm text-gray-600 mb-1">URL de Acesso:</p>
-              <p className="text-lg font-semibold text-purple-600 break-all">
+            <div className="text-center mb-6 print:mb-8">
+              <p className="text-sm text-gray-600 mb-1 print:text-lg print:mb-2">URL de Acesso:</p>
+              <p className="text-lg font-semibold text-purple-600 break-all print:text-2xl">
                 {window.location.origin}
               </p>
             </div>
 
-            <div className="flex gap-3">
+            {/* Print-only footer */}
+            <div className="hidden print:block text-center mt-12 pt-8 border-t-2 border-gray-300">
+              <p className="text-gray-600 text-lg">
+                Desenvolvido para promover segurança no ambiente de trabalho
+              </p>
+              <p className="text-gray-500 text-sm mt-2">
+                {new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            </div>
+
+            <div className="flex gap-3 print:hidden">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

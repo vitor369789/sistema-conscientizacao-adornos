@@ -13,6 +13,24 @@
     overflow-x: hidden;
     position: relative;
   }
+
+  /* Print styles for QR Code */
+  @media print {
+    body {
+      background: white !important;
+    }
+    
+    #root {
+      transform: none !important;
+      width: 100% !important;
+      margin-left: 0 !important;
+    }
+    
+    /* Hide everything except QR code modal when printing */
+    body > div:not(.fixed) {
+      display: none !important;
+    }
+  }
   
   #root {
     overflow-x: hidden;
