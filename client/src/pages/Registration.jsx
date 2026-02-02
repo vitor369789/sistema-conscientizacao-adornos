@@ -71,7 +71,7 @@ function Registration() {
           {/* Renderizar logos do cabeçalho (1, 2, 3) */}
           {!logo1Error && (
             <img 
-              src={`/logo.png?t=${Date.now()}`}
+              src={`/logo1.png?t=${Date.now()}`}
               alt="Logo 1" 
               className="h-24 w-auto object-contain"
               onError={() => setLogo1Error(true)}
