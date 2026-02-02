@@ -12,9 +12,11 @@ const slides = [
     color: 'from-blue-500 to-cyan-500',
     illustration: SafetyIllustration,
     content: [
-      'Adornos podem parecer inofensivos, mas em ambientes de trabalho podem representar sérios riscos',
-      'Vamos entender juntos por que a segurança deve sempre vir em primeiro lugar',
-      'Esta apresentação vai mostrar situações reais e como prevenir acidentes'
+      '🏥 Adornos não são permitidos durante a assistência',
+      '🦠 O cuidado começa antes do contato com o paciente',
+      '⚠️ Pequenos detalhes podem interferir na segurança de todos',
+      '📖 Base legal: NR-32 - Segurança e Saúde no Trabalho em Serviços de Saúde',
+      '🎀 Qualquer adorno que dificulte a higienização'
     ]
   },
   {
@@ -24,12 +26,13 @@ const slides = [
     color: 'from-purple-500 to-pink-500',
     illustration: RingIllustration,
     content: [
-      '💍 Anéis, alianças e joias nas mãos',
+      '💍 Anéis, alianças e alargadores',
       '⌚ Relógios e pulseiras',
       '📿 Colares e correntes',
-      '👂 Brincos grandes ou pendentes',
-      '💅 Unhas postiças ou muito longas',
-      '👔 Gravatas soltas e lenços'
+      '👔 Gravatas soltas e lenços',
+      '👂 Brincos',
+      '💅 Unhas alongadas ou com esmalte',
+      '🎀 Qualquer adorno que dificulte a higienização'
     ]
   },
   {
@@ -41,28 +44,72 @@ const slides = [
     content: [
       '⚠️ Enroscamento em máquinas e equipamentos',
       '⚡ Condução de corrente elétrica (anéis e pulseiras metálicas)',
-      '🔥 Contato com produtos químicos',
+      '🦠 Contaminação em áreas estéreis',
       '🤕 Lesões por arrancamento ou esmagamento',
       '💥 Interferência em equipamentos de precisão',
-      '🚨 Contaminação em áreas estéreis'
+      '🚨 Risco biológico e quebra de barreira de proteção'
     ]
   },
   {
     id: 4,
-    title: 'Casos Reais',
+    title: 'Anéis e Alianças: Por Que Não?',
     icon: XCircle,
     color: 'from-yellow-500 to-red-500',
-    illustration: WatchIllustration,
+    illustration: RingIllustration,
     content: [
-      '📊 Estudos mostram que 15% dos acidentes de trabalho envolvem adornos',
-      '🏥 Anéis podem causar degloving (arrancamento da pele)',
-      '⚡ Relógios metálicos já causaram choques elétricos fatais',
-      '🔧 Colares podem ser puxados por máquinas rotativas',
-      '💍 Anéis podem prender em equipamentos causando amputações'
+      '🦠 Dificultam a higienização das mãos',
+      '⚠️ Favorecem a permanência de microrganismos',
+      '🚫 Aumentam risco de contaminação cruzada',
+      '💉 Podem romper luvas de procedimento',
+      '🏥 Podem causar degloving (arrancamento da pele)',
+      '📖 Base legal: NR-32 e diretrizes da ANVISA'
     ]
   },
   {
     id: 5,
+    title: 'Relógios no Punho: Permitido?',
+    icon: AlertTriangle,
+    color: 'from-orange-500 to-red-500',
+    illustration: WatchIllustration,
+    content: [
+      '❌ NÃO é permitido durante o plantão',
+      '🧼 Impede a correta higiene das mãos e antebraços',
+      '🦠 Aumenta o risco de contaminação cruzada',
+      '⚡ Relógios metálicos já causaram choques elétricos fatais',
+      '⚠️ Interfere na paramentação adequada',
+      '📖 Base legal: NR-32 e protocolos da SCIH'
+    ]
+  },
+  {
+    id: 6,
+    title: 'Unhas e Esmaltes: Qual o Risco?',
+    icon: AlertTriangle,
+    color: 'from-pink-500 to-purple-500',
+    illustration: WorkerIllustration,
+    content: [
+      '🦠 Unhas longas abrigam microrganismos',
+      '💅 Esmaltes dificultam a higienização adequada',
+      '⚠️ Aumentam o risco de infecção',
+      '🚫 Podem romper luvas e contaminar procedimentos',
+      '✅ Mantenha unhas curtas, limpas e sem esmalte'
+    ]
+  },
+  {
+    id: 7,
+    title: 'Brincos, Pulseiras e Colares',
+    icon: XCircle,
+    color: 'from-red-500 to-pink-500',
+    illustration: NecklaceIllustration,
+    content: [
+      '❌ NÃO são permitidos no setor assistencial',
+      '🦠 Risco biológico - acúmulo de microrganismos',
+      '⚠️ Risco de acidente - podem enroscar em equipamentos',
+      '🚫 Quebra de barreira de proteção',
+      '📖 Base legal: NR-32 e protocolos da SCIH'
+    ]
+  },
+  {
+    id: 8,
     title: 'Boas Práticas',
     icon: CheckCircle,
     color: 'from-green-500 to-emerald-500',
@@ -70,15 +117,15 @@ const slides = [
     content: [
       '✅ Remova todos os adornos antes de iniciar o trabalho',
       '🔒 Guarde seus pertences em local seguro',
-      '👀 Mantenha unhas curtas e limpas',
-      '👕 Use apenas uniformes adequados',
-      '🛡️ Utilize EPIs corretamente',
-      '📋 Siga sempre as normas de segurança da empresa'
+      '👀 Mantenha unhas curtas, limpas e sem esmalte',
+      '🧼 Higienize as mãos corretamente',
+      '🛡️ Utilize EPIs adequadamente',
+      '📋 Siga sempre as normas de segurança'
     ]
   },
   {
-    id: 6,
-    title: 'Sua Segurança, Nossa Prioridade',
+    id: 9,
+    title: 'Política Institucional - ADORNO ZERO',
     icon: Shield,
     color: 'from-indigo-500 to-purple-500',
     illustration: SafetyIllustration,
@@ -87,8 +134,11 @@ const slides = [
       '🤝 Trabalho seguro é trabalho bem feito',
       '🏆 Sua família conta com você todos os dias',
       '✨ Pequenas atitudes salvam vidas',
-      '📢 Reporte situações de risco',
-      '🎯 Juntos construímos um ambiente mais seguro'
+      '� ADORNO ZERO - Nenhum adorno é permitido',
+      '💡 "Adorno não é detalhe"',
+      '🏥 Aqui, o cuidado começa antes do contato',
+      '🤝 A SCIH orienta, apoia e conta com você',
+      '🎯 Vamos juntos nessa? ADORNO ZERO!'
     ]
   }
 ];
