@@ -68,7 +68,7 @@ const slides = [
   {
     id: 5,
     title: 'Relógios no Punho: Permitido?',
-    icon: AlertTriangle,
+    icon: XCircle,
     color: 'from-orange-500 to-red-500',
     illustration: WatchIllustration,
     content: [
@@ -83,7 +83,7 @@ const slides = [
   {
     id: 6,
     title: 'Unhas e Esmaltes: Qual o Risco?',
-    icon: AlertTriangle,
+    icon: XCircle,
     color: 'from-pink-500 to-purple-500',
     illustration: WorkerIllustration,
     content: [
