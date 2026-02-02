@@ -3,8 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
     @apply bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  #root {
+    overflow-x: hidden;
   }
 }
 
@@ -19,6 +29,15 @@
   
   .btn-secondary {
     @apply bg-white text-purple-600 font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl border-2 border-purple-600 transform hover:scale-105 transition-all duration-200;
+  }
+  
+  /* Responsive utilities - apenas altura */
+  * {
+    box-sizing: border-box;
+  }
+  
+  img, svg {
+    height: auto;
   }
 }
 
